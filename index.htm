@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            background-color: rgb(193, 186, 186);
+        }
+
+        form {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #submitBtn {
+            transition: all 0.3s ease;
+        }
+
+        .unclickable {
+            position: relative;
+            z-index: 1;
+        }
+
+        .unclickable.hovered::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <h1 align="center">Vahid teacher's task</h1>
+    <form id="myForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <span class="error-message" id="nameError"></span><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <span class="error-message" id="emailError"></span><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <span class="error-message" id="passwordError"></span><br>
+
+        <input type="submit" id="submitBtn" value="Submit" class="unclickable">
+    </form>
+
+    <script>
+       const form = document.getElementById("myForm");
+const nameInput = document.getElementById("name");
+const nameError = document.getElementById("nameError");
+const emailInput = document.getElementById("email");
+const emailError = document.getElementById("emailError");
+const passwordInput = document.getElementById("password");
+const passwordError = document.getElementById("passwordError");
+const submitBtn = document.getElementById("submitBtn");
+
+nameInput.addEventListener("input", validateName);
+emailInput.addEventListener("input", validateEmail);
+passwordInput.addEventListener("input", validatePassword);
+
+function validateName() {
+  const name = nameInput.value;
+
+  if (name.trim() === "") {
+    nameInput.setCustomValidity("Name is required");
+    nameError.textContent = "Name is required";
+  } else {
+    nameInput.setCustomValidity("");
+    nameError.textContent = "";
+  }
+}
+
+function validateEmail() {
+  const email = emailInput.value;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (emailRegex.test(email)) {
+    emailInput.setCustomValidity("");
+    emailError.textContent = "";
+  } else {
+    emailInput.setCustomValidity("Invalid email format");
+    emailError.textContent = "Email format should be user@example.com";
+  }
+}
+
+function validatePassword() {
+  const password = passwordInput.value;
+  const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$/;
+
+  if (passwordRegex.test(password)) {
+    passwordInput.setCustomValidity("");
+    passwordError.textContent = "";
+  } else {
+    passwordInput.setCustomValidity("Invalid password format");
+    passwordError.textContent =
+      "Password must contain at least 8 characters, including 1 uppercase letter, 1 lowercase letter, 1 digit, and 1 special symbol.";
+  }
+}
+
+form.addEventListener("input", function () {
+  if (form.checkValidity()) {
+    submitBtn.classList.remove("unclickable");
+  } else {
+    submitBtn.classList.add("unclickable");
+  }
+});
+
+submitBtn.addEventListener("mouseover", function () {
+  if (submitBtn.classList.contains("unclickable")) {
+    submitBtn.classList.add("hovered");
+    const randomX = Math.floor(Math.random() * window.innerWidth);
+    const randomY = Math.floor(Math.random() * window.innerHeight);
+    submitBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+  }
+});
+
+submitBtn.addEventListener("mouseout", function () {
+  submitBtn.classList.remove("hovered");
+  submitBtn.style.transform = "";
+});
+
+    </script>
+</body>
+</html>
